@@ -4,11 +4,11 @@ module.exports = {
 		if(!rawObj){
         rawObj={};
 	    }
-	    for (let key in copyObj) {
+	    for (var key in copyObj) {
 	        rawObj[key] = copyObj[key];
 	    }
 	    return rawObj;
 	},
 
-	
+
 }
