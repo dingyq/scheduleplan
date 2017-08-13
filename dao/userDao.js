@@ -1,11 +1,11 @@
 // 实现与MySQL交互
 var mysql = require('mysql');
-var $conf = require('../conf/db');
-var $util = require('../util/util');
-var $sql = require('./userSqlMapping');
+var dbConf = require('../conf/db');
+var util = require('../util/util');
+var sqlMap = require('./userSqlMapping');
  
 // 使用连接池，提升性能
-var pool  = mysql.createPool($util.extend({}, $conf.mysql));
+var pool  = mysql.createPool(util.extend({}, dbConf.mysql));
  
 // 向前台返回JSON方法的简单封装
 var jsonWrite = function (res, ret) {
@@ -27,7 +27,7 @@ module.exports = {
  
 			// 建立连接，向表中插入值
 			// 'INSERT INTO user(id, name, age) VALUES(0,?,?)',
-			connection.query($sql.insert, [param.name, param.age], function(err, result) {
+			connection.query(sqlMap.insert, [param.name, param.age], function(err, result) {
 				if(result) {
 					result = {
 						code: 200,
@@ -47,7 +47,7 @@ module.exports = {
 		// delete by Id
 		pool.getConnection(function(err, connection) {
 			var id = +req.query.id;
-			connection.query($sql.delete, id, function(err, result) {
+			connection.query(sqlMap.delete, id, function(err, result) {
 				if(result.affectedRows > 0) {
 					result = {
 						code: 200,
@@ -71,7 +71,7 @@ module.exports = {
 		}
  
 		pool.getConnection(function(err, connection) {
-			connection.query($sql.update, [param.name, param.age, +param.id], function(err, result) {
+			connection.query(sqlMap.update, [param.name, param.age, +param.id], function(err, result) {
 				// 使用页面进行跳转提示
 				if(result.affectedRows > 0) {
 					res.render('suc', {
@@ -91,8 +91,10 @@ module.exports = {
 	queryById: function (req, res, next) {
 		var id = +req.query.id; // 为了拼凑正确的sql语句，这里要转下整数
 		pool.getConnection(function(err, connection) {
-			connection.query($sql.queryById, id, function(err, result) {
-				jsonWrite(res, result);
+			connection.query(sqlMap.queryById, id, function(err, result) {
+				var tResult = {}
+				tResult.result = result
+				jsonWrite(res, tResult);
 				connection.release();
  
 			});
@@ -100,8 +102,10 @@ module.exports = {
 	},
 	queryAll: function (req, res, next) {
 		pool.getConnection(function(err, connection) {
-			connection.query($sql.queryAll, function(err, result) {
-				jsonWrite(res, result);
+			connection.query(sqlMap.queryAll, function(err, result) {
+				var tResult = {}
+				tResult.result = result
+				jsonWrite(res, tResult);
 				connection.release();
 			});
 		});
