@@ -62,15 +62,14 @@ module.exports = {
 	},
 	update: function (req, res, next) {
 		// update by id
-		// 为了简单，要求同时传name和age两个参数
 		var param = req.body;
-		if(param.name == null || param.age == null || param.missionId == null) {
+		if(param.missionId == null) {
 			jsonWrite(res, undefined);
 			return;
 		}
  
 		pool.getConnection(function(err, connection) {
-			connection.query(sqlMap.update, [param.name, param.age, +param.missionId], function(err, result) {
+			connection.query(sqlMap.update, [param.state, param.deadlineTime, param.completeTime, param.type, param.title, param.dutyId, param.dutyName, param.needClock, param.content], function(err, result) {
 				// 使用页面进行跳转提示
 				if(result.affectedRows > 0) {
 					res.render('suc', {
@@ -88,9 +87,9 @@ module.exports = {
  
 	},
 	queryById: function (req, res, next) {
-		var id = +req.query.missionId; // 为了拼凑正确的sql语句，这里要转下整数
+		var missionId = +req.query.missionId; // 为了拼凑正确的sql语句，这里要转下整数
 		pool.getConnection(function(err, connection) {
-			connection.query(sqlMap.queryById, id, function(err, result) {
+			connection.query(sqlMap.queryById, missionId, function(err, result) {
 				var tResult = {}
 				tResult.result = result
 				jsonWrite(res, tResult);
