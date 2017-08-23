@@ -69,7 +69,7 @@ module.exports = {
 		}
  
 		pool.getConnection(function(err, connection) {
-			connection.query(sqlMap.update+'where missionId='+param.missionId, [param.state, param.deadlineTime, param.completeTime, param.type, param.title, param.dutyId, param.dutyName, param.needClock, param.content], function(err, result) {
+			connection.query(sqlMap.update, [param.state, param.deadlineTime, param.completeTime, param.type, param.title, param.dutyId, param.dutyName, param.needClock, param.content, {missionId: +param.missionId}], function(err, result) {
 				// 使用页面进行跳转提示
 				if(result.affectedRows > 0) {
 					res.render('suc', {
