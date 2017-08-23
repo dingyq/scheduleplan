@@ -45,7 +45,7 @@ module.exports = {
 	delete: function (req, res, next) {
 		// delete by Id
 		pool.getConnection(function(err, connection) {
-			var id = +req.query.id;
+			var id = +req.query.missionId;
 			connection.query(sqlMap.delete, id, function(err, result) {
 				if(result.affectedRows > 0) {
 					result = {
@@ -64,13 +64,13 @@ module.exports = {
 		// update by id
 		// 为了简单，要求同时传name和age两个参数
 		var param = req.body;
-		if(param.name == null || param.age == null || param.id == null) {
+		if(param.name == null || param.age == null || param.missionId == null) {
 			jsonWrite(res, undefined);
 			return;
 		}
  
 		pool.getConnection(function(err, connection) {
-			connection.query(sqlMap.update, [param.name, param.age, +param.id], function(err, result) {
+			connection.query(sqlMap.update, [param.name, param.age, +param.missionId], function(err, result) {
 				// 使用页面进行跳转提示
 				if(result.affectedRows > 0) {
 					res.render('suc', {
@@ -88,7 +88,7 @@ module.exports = {
  
 	},
 	queryById: function (req, res, next) {
-		var id = +req.query.id; // 为了拼凑正确的sql语句，这里要转下整数
+		var id = +req.query.missionId; // 为了拼凑正确的sql语句，这里要转下整数
 		pool.getConnection(function(err, connection) {
 			connection.query(sqlMap.queryById, id, function(err, result) {
 				var tResult = {}
