@@ -1,30 +1,87 @@
-CREATE TABLE IF NOT EXISTS `missionnotice`( `id` BIGINT UNSIGNED AUTO_INCREMENT, `state` INT UNSIGNED NOT NULL, `deadlineTime` INT UNSIGNED, `createUserName` VARCHAR(100) NOT NULL, `completeTime` INT UNSIGNED, `type` INT UNSIGNED NOT NULL, `title` VARCHAR(300) NOT NULL, `createTime` INT UNSIGNED NOT NULL, `dutyId` INT UNSIGNED, `dutyName` VARCHAR(100), `createUserId` INT UNSIGNED NOT NULL, `needClock` INT UNSIGNED NOT NULL, `content` VARCHAR(2000) NOT NULL,
-PRIMARY KEY ( `id` ))ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+function addMisson(){
+	/*
+	请求包：
+	{
+		"userId":"",
+		"authKey":"",
+		"getBackData":1,
 
+		"state":1,
+		"deadlineTime":123123,
+		"createUserName":"ddd",
+		"completeTime":0,
+		"type":2,
+		"title":"吃饭",
+		"createTime":13232, 
+		"dutyId":1,
+		"dutyName":"1212"
+		"createUserId":1,
+		"needClock":1,		
+		"content":"13209321234",		
+	}
+	*/
+	return {
+		"method":'addMisson',
+		"statusCode":0,
+        "statusInfo":"success",
+		"returnData":{
+			"state":1,
+			"deadlineTime":123123,
+			"createUserName":"ddd",
+			"completeTime":0,
+			"type":2,
+			"title":"吃饭",
+			"createTime":13232, 
+			"dutyId":1,
+			"dutyName":"1212"
+			"createUserId":1,
+			"needClock":1,		
+			"content":"13209321234",			
+		}	
+	}
+}
 
+//------------------------------------------------------------//
+
+CREATE TABLE IF NOT EXISTS `missionnotice`( `missionId` BIGINT UNSIGNED AUTO_INCREMENT, 
+	`state` INT UNSIGNED NOT NULL, 
+	`deadlineTime` BIGINT UNSIGNED, 
+	`createUserName` VARCHAR(100) NOT NULL, 
+	`completeTime` BIGINT UNSIGNED, 
+	`type` INT UNSIGNED NOT NULL, 
+	`title` VARCHAR(300) NOT NULL, 
+	`createTime` BIGINT UNSIGNED NOT NULL, 
+	`dutyId` INT UNSIGNED, 
+	`dutyName` VARCHAR(100), 
+	`createUserId` INT UNSIGNED NOT NULL, 
+	`needClock` INT UNSIGNED NOT NULL, 
+	`content` VARCHAR(2000) NOT NULL,
+PRIMARY KEY ( `missionId` ))ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*
 --------
 
 +----------------+---------------------+------+-----+---------+----------------+
 | Field          | Type                | Null | Key | Default | Extra          |
 +----------------+---------------------+------+-----+---------+----------------+
-| id             | bigint(20) unsigned | NO   | PRI | NULL    | auto_increment |
+| missionId      | bigint(20) unsigned | NO   | PRI | NULL    | auto_increment |
 | state          | int(10) unsigned    | NO   |     | NULL    |                |
-| deadlineTime   | int(10) unsigned    | YES  |     | NULL    |                |
+| deadlineTime   | bigint(20) unsigned | YES  |     | NULL    |                |
 | createUserName | varchar(100)        | NO   |     | NULL    |                |
-| completeTime   | int(10) unsigned    | YES  |     | NULL    |                |
+| completeTime   | bigint(20) unsigned | YES  |     | NULL    |                |
 | type           | int(10) unsigned    | NO   |     | NULL    |                |
 | title          | varchar(300)        | NO   |     | NULL    |                |
-| createTime     | int(10) unsigned    | NO   |     | NULL    |                |
+| createTime     | bigint(20) unsigned | NO   |     | NULL    |                |
 | dutyId         | int(10) unsigned    | YES  |     | NULL    |                |
 | dutyName       | varchar(100)        | YES  |     | NULL    |                |
 | createUserId   | int(10) unsigned    | NO   |     | NULL    |                |
 | needClock      | int(10) unsigned    | NO   |     | NULL    |                |
 | content        | varchar(2000)       | NO   |     | NULL    |                |
 +----------------+---------------------+------+-----+---------+----------------+
+
 --------
-
-
+*/
 
 
 SHOW DATABASES                                //列出 MySQL Server 数据库。
