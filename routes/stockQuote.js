@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
+var stockService = require('../util/stockService');
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'stockQuote' });
+  stockService.fetchKlineChart(req, res, next);
 });
 
 module.exports = router;
