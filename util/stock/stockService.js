@@ -1,11 +1,17 @@
+/**
+ * 股票搜索与行情获取相关接口
+ * @author yongqiang
+ * @version 2017-10-20
+ *
+ */
+
 const superagent = require('superagent');
 const Promise = require('promise');
 var url = require('url');
 const fs = require('fs');
 const path = require('path');
 const bashFileTool = require('./bashFileTool');
-
-// var agent = require('superagent-promise')(require('superagent'), Promise);
+const MyError = require('./MyError');
 
 const SEARCH_HOST = 'https://wechatapp.futu5.com/stock/search?';
 const KLINE_DATA_HOST = 'https://wechatapp.futu5.com/stock/kline?';
@@ -33,27 +39,19 @@ stockService.fetchKlineChart = function(req, res, next) {
 		this.searchStock(req.query.key, resolve, reject);
 	})
 	.then((function (tRes) {
-		stock = tRes.body.data.list[0];
+		var stockList = tRes.body.data.list;
+		if (stockList.length <= 0) {
+			throw new MyError('未搜索到相关股票', -1);
+		}
+		stock = stockList[0];
 		return this.fetchKlineData(stock.stock_id);
 	}).bind(this))
 	.then(function (tRes) {
-		// generateBashFile(stock, tRes.body.data.array_items)
-		// res.send(tRes.body);
 		res.send(bashFileTool.generate(stock, tRes.body.data.array_items));
 	})
 	.catch(function (e) {
-		res.send(e);
+		res.send('    \r\n\033[31m' + e.message + '\033[0m \r\n\r\n');
 	});
-  	// res.render('index', { title: 'stockQuote' });
-
-  	// fs.readFile(process.cwd()+'/public/file/wetherDemo.sh', {flag: 'r+', encoding: 'utf8'}, function (err, data) {
-   //  	if(err) {
-   //   		console.error(err);
-   //   		res.send(err);
-   //   		return;
-   //  	}
-   //  	res.send(data);
-  	// });
 }
 
 module.exports = stockService;

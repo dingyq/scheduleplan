@@ -1,3 +1,10 @@
+/**
+ * 将股票与相应行情生成bash文本
+ * 
+ * @author yongqiang
+ * @version 2017-10-22
+ *
+ */
 
 const kUseGap = true;
 const kVCount = 14;
